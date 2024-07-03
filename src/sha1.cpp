@@ -7,12 +7,6 @@
 
 // https://en.wikipedia.org/wiki/SHA-1
 
-uint32_t leftRotate32bits(uint32_t 	n,
-	std::size_t 	rotate)
-{
-	return (n << rotate) | (n >> (32 - rotate));
-}
-
 SHA1::SHA1(const std::string& data)
 {
 	m_Data = std::move(data);
@@ -27,8 +21,6 @@ SHA1::SHA1(const std::string& data)
 			return (x << n) | (x >> (32 - n));
 		};
 	
-	//std::cout << dataLength << std::endl;
-
 	uint32_t W[80] = { 0 };
 
 	// Divide into 64-bytes chunks
@@ -48,7 +40,7 @@ SHA1::SHA1(const std::string& data)
 			// Message schedule: Extend 16 4-bytes into 80 4-bytes
 			for (uint8_t k = 16; k < 80; k++)
 			{
-				W[k] = leftRotate32bits(W[k - 3] ^ W[k - 8] ^ W[k - 14] ^ W[k - 16], 1);
+				W[k] = leftRotate(W[k - 3] ^ W[k - 8] ^ W[k - 14] ^ W[k - 16], 1);
 			}
 		}
 
