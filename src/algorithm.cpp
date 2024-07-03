@@ -2,24 +2,20 @@
 
 #include "algorithm.hpp"
 
-void Algorithm::Preprocess(uint32_t paddingSize)
+void Algorithm::Preprocess(uint32_t as)
 {
-	size_t messageBits = m_Data.size() * 8;
-	// 64 bit is size of our left over data and 8 bit because 0x80 added
-	uint32_t zeroBitsToAdd = (paddingSize - 64 - (messageBits + 8) % paddingSize) % paddingSize;
+	uint64_t messageBits = m_Data.size() * 8;
 
-	uint32_t totalBytesToAdd = zeroBitsToAdd / 8;
-	
 	m_Data.push_back(0b1000'0000);
 
-	for (uint32_t i = 0; i < totalBytesToAdd; i++)
+	while ((m_Data.size() * 8) % 512 != 448)
 	{
 		m_Data.push_back(0x00);
 	}
 
-	for (uint32_t i = 0; i < 8; i++)
+	// Account for big endian
+	for (int i = 7; i >= 0; i--)
 	{
-		uint8_t byte = (totalBytesToAdd >> (i * 8)) & 0xFF;
-		m_Data.push_back(byte);
+		m_Data.push_back((messageBits >> (i * 8)) & 0xFF);
 	}
 }
