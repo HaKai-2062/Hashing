@@ -14,5 +14,4 @@ private:
 
 protected:
 	std::string m_Data;
-	std::string m_HashedData;
 };

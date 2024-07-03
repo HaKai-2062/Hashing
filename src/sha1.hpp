@@ -6,6 +6,7 @@ class SHA1 : public Algorithm
 {
 public:
 	SHA1(const std::string& data);
+	std::string GetHashValue() const;
 
 private:
 	SHA1() = delete;
