@@ -16,11 +16,6 @@ SHA1::SHA1(const std::string& data)
 	
 	size_t dataLength = m_Data.size();
 
-	auto leftRotate = [](uint32_t x, uint32_t n) -> uint32_t
-		{
-			return (x << n) | (x >> (32 - n));
-		};
-	
 	uint32_t W[80] = { 0 };
 
 	// Divide into 64-bytes chunks
@@ -36,12 +31,12 @@ SHA1::SHA1(const std::string& data)
 			{
 				W[j] = (W[j] << 8) + static_cast<uint8_t>(m_Data[i * 64 + j * 4 + k]);
 			}
+		}
 
-			// Message schedule: Extend 16 4-bytes into 80 4-bytes
-			for (uint8_t k = 16; k < 80; k++)
-			{
-				W[k] = leftRotate(W[k - 3] ^ W[k - 8] ^ W[k - 14] ^ W[k - 16], 1);
-			}
+		// Message schedule: Extend 16 4-bytes into 80 4-bytes
+		for (uint8_t k = 16; k < 80; k++)
+		{
+			W[k] = std::rotl(W[k - 3] ^ W[k - 8] ^ W[k - 14] ^ W[k - 16], 1);
 		}
 
 		uint32_t a = m_H0;
@@ -76,10 +71,10 @@ SHA1::SHA1(const std::string& data)
 				k = 0xCA62C1D6;
 			}
 
-			uint32_t temp = (leftRotate(a, 5) + f + e + k + W[j]);
+			uint32_t temp = (std::rotl(a, 5) + f + e + k + W[j]);
 			e = d;
 			d = c;
-			c = leftRotate(b, 30);
+			c = std::rotl(b, 30);
 			b = a;
 			a = temp;
 		}

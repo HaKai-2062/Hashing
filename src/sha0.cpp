@@ -36,12 +36,12 @@ SHA0::SHA0(const std::string& data)
 			{
 				W[j] = (W[j] << 8) + static_cast<uint8_t>(m_Data[i * 64 + j * 4 + k]);
 			}
+		}
 
-			// Message schedule: Extend 16 4-bytes into 80 4-bytes
-			for (uint8_t k = 16; k < 80; k++)
-			{
-				W[k] = W[k - 3] ^ W[k - 8] ^ W[k - 14] ^ W[k - 16], 1;
-			}
+		// Message schedule: Extend 16 4-bytes into 80 4-bytes
+		for (uint8_t k = 16; k < 80; k++)
+		{
+			W[k] = W[k - 3] ^ W[k - 8] ^ W[k - 14] ^ W[k - 16], 1;
 		}
 
 		uint32_t a = m_H0;
