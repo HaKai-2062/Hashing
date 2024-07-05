@@ -4,6 +4,7 @@
 #include "sha1.hpp"
 #include "sha256.hpp"
 #include "sha224.hpp"
+#include "sha512.hpp"
 
 int main(int argc, char** argv)
 {
@@ -11,8 +12,8 @@ int main(int argc, char** argv)
 
 	std::string myString = "The quick brown fox jumps over the lazy dog";
 	
-	SHA224 sha224(myString);
-	std::cout << sha224.GetHashValue() << std::endl;
+	SHA512 hash(myString);
+	std::cout << hash.GetHashValue() << std::endl;
 
 	return 0;
 }
