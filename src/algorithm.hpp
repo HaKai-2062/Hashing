@@ -5,7 +5,7 @@ class Algorithm
 protected:
 	Algorithm() = default;
 	~Algorithm() = default;
-	void Preprocess(uint32_t paddingSize);
+	void Preprocess(uint32_t paddingSize, uint32_t bitSize);
 
 private:
 	Algorithm(const Algorithm&) = delete;
