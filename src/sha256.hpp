@@ -5,14 +5,14 @@
 class SHA256 : public Algorithm
 {
 public:
-	SHA256(const std::string& data);
-	std::string GetHashValue() const;
+	SHA256() = default;
+	virtual std::string GetHashValue(const std::string& data);
 
 private:
-	SHA256() = delete;
 	SHA256(const SHA256&) = delete;
 	SHA256(const SHA256&&) = delete;
 	void operator=(const SHA256&) = delete;
+	virtual void PureVirtualFunction() {}
 
 private:
 	uint32_t m_H0 = 0x6a09e667;

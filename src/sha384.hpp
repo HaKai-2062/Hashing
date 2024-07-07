@@ -5,14 +5,14 @@
 class SHA384 : public Algorithm
 {
 public:
-	SHA384(const std::string& data);
-	std::string GetHashValue() const;
+	SHA384() = default;
+	virtual std::string GetHashValue(const std::string& data);
 
 private:
-	SHA384() = delete;
 	SHA384(const SHA384&) = delete;
 	SHA384(const SHA384&&) = delete;
 	void operator=(const SHA384&) = delete;
+	virtual void PureVirtualFunction() {}
 
 private:
 	uint64_t m_H0 = 0xcbbb9d5dc1059ed8;

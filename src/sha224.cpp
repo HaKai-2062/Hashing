@@ -7,12 +7,21 @@
 
 // https://en.wikipedia.org/wiki/SHA-2
 
-SHA224::SHA224(const std::string& data)
+std::string SHA224::GetHashValue(const std::string& data)
 {
-	m_Data = std::move(data);
+	m_Data = data;
 
 	// Apply padding to get consistent chunks of 512 bytes of data
 	Preprocess(512, 64);
+
+	m_H0 = 0xc1059ed8;
+	m_H1 = 0x367cd507;
+	m_H2 = 0x3070dd17;
+	m_H3 = 0xf70e5939;
+	m_H4 = 0xffc00b31;
+	m_H5 = 0x68581511;
+	m_H6 = 0x64f98fa7;
+	m_H7 = 0xbefa4fa4;
 
 	size_t dataLength = m_Data.size();
 
@@ -29,7 +38,7 @@ SHA224::SHA224(const std::string& data)
 			// 4-byte word
 			for (uint8_t k = 0; k < 4; k++)
 			{
-				W[j] = (W[j] << 8) + static_cast<uint8_t>(m_Data[i * 64 + j * 4 + k]);
+				W[j] = (W[j] << 8) + static_cast<uint8_t>(m_Data[i + j * 4 + k]);
 			}
 		}
 
@@ -79,21 +88,24 @@ SHA224::SHA224(const std::string& data)
 		m_H6 += g;
 		//m_H7 += h;
 	}
-}
 
-std::string SHA224::GetHashValue() const
-{
-	std::stringstream ss;
-	ss << std::hex;
+	std::string result;
 
-	ss << std::setw(8) << std::setfill('0') << m_H0;
-	ss << std::setw(8) << std::setfill('0') << m_H1;
-	ss << std::setw(8) << std::setfill('0') << m_H2;
-	ss << std::setw(8) << std::setfill('0') << m_H3;
-	ss << std::setw(8) << std::setfill('0') << m_H4;
-	ss << std::setw(8) << std::setfill('0') << m_H5;
-	ss << std::setw(8) << std::setfill('0') << m_H6;
-	//ss << std::setw(8) << std::setfill('0') << m_H7;
+	auto appendBytes = [](std::string& str, uint32_t value)
+		{
+			str += static_cast<char>((value >> 24) & 0xFF);
+			str += static_cast<char>((value >> 16) & 0xFF);
+			str += static_cast<char>((value >> 8) & 0xFF);
+			str += static_cast<char>(value & 0xFF);
+		};
 
-	return ss.str();
+	appendBytes(result, m_H0);
+	appendBytes(result, m_H1);
+	appendBytes(result, m_H2);
+	appendBytes(result, m_H3);
+	appendBytes(result, m_H4);
+	appendBytes(result, m_H5);
+	appendBytes(result, m_H6);
+
+	return result;
 }

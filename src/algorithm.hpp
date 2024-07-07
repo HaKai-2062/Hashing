@@ -2,9 +2,12 @@
 
 class Algorithm
 {
+public:
+	virtual std::string GetHashValue(const std::string& data) = 0;
+
 protected:
 	Algorithm() = default;
-	~Algorithm() = default;
+	virtual ~Algorithm() = default;
 	void Preprocess(uint32_t paddingSize, uint32_t bitSize);
 
 private:

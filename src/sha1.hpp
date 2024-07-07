@@ -5,11 +5,10 @@
 class SHA1 : public Algorithm
 {
 public:
-	SHA1(const std::string& data);
-	std::string GetHashValue() const;
+	SHA1() = default;
+	virtual std::string GetHashValue(const std::string& data);
 
 private:
-	SHA1() = delete;
 	SHA1(const SHA1&) = delete;
 	SHA1(const SHA1&&) = delete;
 	void operator=(const SHA1&) = delete;

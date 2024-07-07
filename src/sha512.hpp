@@ -5,14 +5,14 @@
 class SHA512 : public Algorithm
 {
 public:
-	SHA512(const std::string& data);
-	std::string GetHashValue() const;
+	SHA512() = default;
+	virtual std::string GetHashValue(const std::string& data);
 
 private:
-	SHA512() = delete;
 	SHA512(const SHA512&) = delete;
 	SHA512(const SHA512&&) = delete;
 	void operator=(const SHA512&) = delete;
+	virtual void PureVirtualFunction() {}
 
 private:
 	uint64_t m_H0 = 0x6a09e667f3bcc908;
