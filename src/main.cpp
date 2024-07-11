@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iomanip>
 #include <format>
+#include <chrono>
 
 #include "sha0.hpp"
 #include "sha1.hpp"
@@ -51,6 +52,14 @@ int main(int argc, char** argv)
 	std::cin.clear();
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
+	const auto calculateTime = [&](std::chrono::microseconds previousTime)
+		{
+			std::chrono::microseconds currentTime = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch());
+			auto deltaT = (currentTime - previousTime) / 1000.0f;
+			previousTime = currentTime;
+			return deltaT.count();
+		};
+
 	while (true)
 	{
 		switch (choice)
@@ -69,12 +78,20 @@ int main(int argc, char** argv)
 			SHA512 hash512;
 			SHA384 hash384;
 
-			std::cout << "\nSHA0: " << Utils::byteToHex(hash0.GetHashValue(message)) << std::endl;
-			std::cout << "SHA1: " << Utils::byteToHex(hash1.GetHashValue(message)) << std::endl;
-			std::cout << "SHA256: " << Utils::byteToHex(hash256.GetHashValue(message)) << std::endl;
-			std::cout << "SHA224: " << Utils::byteToHex(hash224.GetHashValue(message)) << std::endl;
-			std::cout << "SHA512: " << Utils::byteToHex(hash512.GetHashValue(message)) << std::endl;
-			std::cout << "SHA384: " << Utils::byteToHex(hash384.GetHashValue(message)) << std::endl;
+			std::chrono::microseconds previousTime = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch());
+
+			std::cout << "\nSHA0: " << Utils::byteToHex(hash0.GetHashValue(message)) << ", ";
+			std::cout << "Time: " << calculateTime(previousTime) << " ms\n";
+			std::cout << "SHA1: " << Utils::byteToHex(hash1.GetHashValue(message)) << ", ";
+			std::cout << "Time: " << calculateTime(previousTime) << " ms\n";
+			std::cout << "SHA256: " << Utils::byteToHex(hash256.GetHashValue(message)) << ", ";
+			std::cout << "Time: " << calculateTime(previousTime) << " ms\n";
+			std::cout << "SHA224: " << Utils::byteToHex(hash224.GetHashValue(message)) << ", ";
+			std::cout << "Time: " << calculateTime(previousTime) << " ms\n";
+			std::cout << "SHA512: " << Utils::byteToHex(hash512.GetHashValue(message)) << ", ";
+			std::cout << "Time: " << calculateTime(previousTime) << " ms\n";
+			std::cout << "SHA384: " << Utils::byteToHex(hash384.GetHashValue(message)) << ", ";
+			std::cout << "Time: " << calculateTime(previousTime) << " ms\n";
 			break;
 		}
 
@@ -95,23 +112,26 @@ int main(int argc, char** argv)
 			std::shared_ptr<SHA512> sha512 = std::make_shared<SHA512>();
 			std::shared_ptr<SHA384> sha384 = std::make_shared<SHA384>();
 
-			std::cout << "\nSHA0: " << Utils::byteToHex(hmac.GetHash(key, message, sha0, 64, 20)) << std::endl;
-			std::cout << "SHA1: " << Utils::byteToHex(hmac.GetHash(key, message, sha1, 64, 20)) << std::endl;
-			std::cout << "SHA256: " << Utils::byteToHex(hmac.GetHash(key, message, sha256, 64, 32)) << std::endl;
-			std::cout << "SHA224: " << Utils::byteToHex(hmac.GetHash(key, message, sha224, 64, 28)) << std::endl;
-			std::cout << "SHA512: " << Utils::byteToHex(hmac.GetHash(key, message, sha512, 128, 64)) << std::endl;
-			std::cout << "SHA384: " << Utils::byteToHex(hmac.GetHash(key, message, sha384, 128, 48)) << std::endl;
+			std::chrono::microseconds previousTime = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch());
+
+			std::cout << "\nSHA0: " << Utils::byteToHex(hmac.GetHash(key, message, sha0, 64, 20)) << ", ";
+			std::cout << "Time: " << calculateTime(previousTime) << " ms\n";
+			std::cout << "SHA1: " << Utils::byteToHex(hmac.GetHash(key, message, sha1, 64, 20)) << ", ";
+			std::cout << "Time: " << calculateTime(previousTime) << " ms\n";
+			std::cout << "SHA256: " << Utils::byteToHex(hmac.GetHash(key, message, sha256, 64, 32)) << ", ";
+			std::cout << "Time: " << calculateTime(previousTime) << " ms\n";
+			std::cout << "SHA224: " << Utils::byteToHex(hmac.GetHash(key, message, sha224, 64, 28)) << ", ";
+			std::cout << "Time: " << calculateTime(previousTime) << " ms\n";
+			std::cout << "SHA512: " << Utils::byteToHex(hmac.GetHash(key, message, sha512, 128, 64)) << ", ";
+			std::cout << "Time: " << calculateTime(previousTime) << " ms\n";
+			std::cout << "SHA384: " << Utils::byteToHex(hmac.GetHash(key, message, sha384, 128, 48)) << ", ";
+			std::cout << "Time: " << calculateTime(previousTime) << " ms\n";
 			break;
 		}
 
 		default:
 			break;
 		}
-
-		// Print benchmarks?
-		// Ask before continue?
 	}
-
-
 	return 0;
 }
